@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .street{
+            background-image: url(./street.jpg);
+            background-size: auto;
+            height: 360px;
+        }
+        img{
+            padding: 15px;
+        }
+        .btn{
+            width: 200px;
+            margin: auto;
+        }
+        button{
+            margin: 10px;
+            padding: 10px;
+            background: black;
+            color: white;
+            border-radius: 5px;
+        }
+        .car_1{
+            left: 100px;
+        }
+        .end{
+            width: 20px;
+            height: 100%;
+            background: yellow;
+            float: right;
+            margin-top: -358px;
+            margin-right: 48px;
+        }
+        .traffic_light{
+            display: flex;
+        }
+        #red{
+            width: 50px;
+            height: 50px;
+            border-radius: 28px;
+            /* background: rgb(255, 170, 170); */
+            z-index: 2;
+            margin: 5px;
+            border: 3px solid black;
+        }
+        #yellow{
+            width: 50px;
+            height: 50px;
+            border-radius: 28px;
+            /* background: rgb(255, 255, 180); */
+            margin: 5px;
+            z-index: 2;
+            border: 3px solid black;
+        }
+        #green{
+            width: 50px;
+            height: 50px;
+            border-radius: 28px;
+            /* background: rgb(177, 255, 177); */
+            margin: 5px;
+            z-index: 2;
+            border: 3px solid black;
+        }
+        #xang1{
+            width: 100px;
+            background: green;
+            height: 10px;
+        }
+        #xang2{
+            width: 100px;
+            background: green;
+            height: 10px;
+        }
+        .car_runing{
+            animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) infinite;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+
+        }
+
+        @keyframes shake {
+            10%, 90% {
+                transform: translate3d(0,-1px, 0);
+            }
+            
+            20%, 80% {
+                transform: translate3d(0, 1px, 0);
+            }
+
+            30%, 50%, 70% {
+                transform: translate3d(0, -1px,0);
+            }
+
+            40%, 60% {
+                transform: translate3d(0, 1px, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="traffic_light">
+            <div id="red"></div>
+            <div id="yellow"></div>
+            <div id="green"></div>
+            <button onclick="start()">Bắt đầu</button>
+        </div>
+        <div class="xang">
+            Xăng xe 1<div id="xang1"></div>
+            Xăng xe 2<div id="xang2"></div>
+        </div>
+
+        <div class="street">
+            <div id="car_1" class="car_runing">
+                <img src="./car_1.png" alt="" width="300px">
+            </div>
+            <div id="car_2" class="car_runing">
+                <img src="./car_2.png" alt="" width="280px">
+            </div>
+            <div class="end"></div>
+        </div>
+        <div class="btn">
+            <button onclick="repeat()">Bắt đầu lại</button>
+        </div>
+    </div>
+<p id="log"></p>
+    <script>
+        carOne = 1;
+        carTwo = 2;
+        var STEP = 10;
+        var y = 0;
+        var x = 0;
+        var x1 = 100;
+        var x2 = 100;
+        car1 = document.getElementById('car_1');
+        car2 = document.getElementById('car_2');
+        xang1 = document.getElementById('xang1');
+        xang2 = document.getElementById('xang2');
+        const log = document.getElementById('log');
+        document.addEventListener('keyup', logKey);
+        function logKey(e) {
+            console.log(e['key'])
+            switch(e['key']){
+                case '1':
+                    x += STEP;
+                    x1 -= 1;
+                    car1.style.paddingLeft = x + 'px';
+                    xang1.style.width =  x1 + 'px';
+                    break;
+                case '0':
+                    y += STEP;
+                    x2 -= 1;
+                    car2.style.paddingLeft = y + 'px';
+                    xang2.style.width =  x2 + 'px';
+                    break;
+            }
+            if(x == 1000){
+                alert('X chiến thắng');
+                repeat();
+            }else if(y == 1000){
+                alert('Y chiến thắng');
+                repeat();
+            }
+        }
+        function repeat(){
+            x = 0; y = 0;
+            x1 = 100; x2 = 100;
+            car1.style.paddingLeft = x + 'px';
+            car2.style.paddingLeft = y + 'px';
+            xang1.style.width =  x1 + 'px';
+            xang2.style.width =  x2 + 'px';
+        }
+        function start(){
+            red = document.getElementById('red');
+            yellow = document.getElementById('yellow');
+            green = document.getElementById('green');
+            handleRed = setInterval(bgred, 1000);
+            function bgred(){
+                resetColor()
+                red.style.backgroundColor = 'red';
+                clearInterval(handleRed);
+                handleYellow = setInterval(bgyellow, 1000);
+            }
+            function bgyellow(){
+                resetColor()
+                yellow.style.backgroundColor = 'yellow';
+                clearInterval(handleYellow);
+                handleGreen = setInterval(bggreen, 1000);
+            }
+            function bggreen(){
+                resetColor()
+                green.style.backgroundColor = 'green';
+                clearInterval(handleGreen);
+            }
+            function resetColor(){
+                red.style.backgroundColor = "white";
+                yellow.style.backgroundColor = "white";
+                green.style.backgroundColor = "white";
+            }
+        }
+    </script>
+</body>
+</html>
